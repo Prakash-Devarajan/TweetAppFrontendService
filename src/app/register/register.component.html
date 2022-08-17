@@ -1,0 +1,118 @@
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+  <div class="card card0 border-0">
+    <div class="row d-flex">
+      <div class="col-lg-5" style="margin-left: -20px;">
+        <div class="row px-3">
+          <img src="../../assets/register.jpg" class="image">
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="wrapper" style="margin-left: 300px;margin-top: 50px;">
+          <div class="text-center mt-4 name">
+            <h2>Register</h2>
+          </div>
+          <form class="p-3 mt-3" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+            <!-- Fisrt Name -->
+            <div class="form-field d-flex align-items-center">
+              <input type="text" formControlName="firstName" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" placeholder="First Name" />
+            </div>
+            <div *ngIf="f.firstName.touched && f.firstName.errors" class="alert alert-danger">
+              <div *ngIf="f.firstName.errors.required">
+                First Name is required
+              </div>
+              <div *ngIf="f.firstName.errors.pattern">
+                First Name only accept Alphabetic characters.
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-field d-flex align-items-center">
+              <input type="text" formControlName="lastName" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" placeholder="Last Name" />
+            </div>
+            <div *ngIf="f.lastName.touched && f.lastName.errors" class="alert alert-danger">
+              <div *ngIf="f.lastName.errors.pattern">Last Name only accept Alphabetic characters.</div>
+              <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+            </div>
+
+
+            <!-- LoginId -->
+            <div class="form-field d-flex align-items-center">
+              <input type="text" on-focusout="search_user()" formControlName="loginId" [(ngModel)]="f_user"
+                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.loginId.errors }"
+                placeholder="Username" />
+            </div>
+            <div *ngIf="f.loginId.touched && (f.loginId.errors || !isUsernameUnique)" class="alert alert-danger">
+              <div *ngIf="f.loginId.errors.required">LoginId is required</div>
+              <div *ngIf="!isUsernameUnique">Username already exists</div>
+            </div>
+            <div class="mt-50 slide-up-fade-in" *ngIf="!flag">Username already exists</div>
+
+            <!-- Password -->
+            <div class="form-field d-flex align-items-center">
+              <input type="password" formControlName="password" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Password" />
+            </div>
+            <div *ngIf="f.password.touched && f.password.errors" class="alert alert-danger">
+              <div *ngIf="f.password.errors.required">Password is required</div>
+              <div *ngIf="f.password.errors?.minlength">Minimum Password length is 6</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-field d-flex align-items-center">
+              <input formControlName="confirmPassword" id="confirmPassword" type="password"
+                placeholder="Confirm Password" class="form-control">
+            </div>
+            <div *ngIf="f.confirmPassword.touched && f.confirmPassword.invalid" class="alert alert-danger">
+              <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required.</div>
+              <div *ngIf="f.confirmPassword.errors.confirmedValidator">Password and Confirm Password must be match.
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-field d-flex align-items-center">
+              <input type="text" formControlName="email" class="form-control" placeholder="Email"
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            </div>
+            <div *ngIf="f.email.touched && (f.email.errors || !isEmailUnique)" class="alert alert-danger">
+              <div *ngIf="f.email.errors.required">Email is required</div>
+              <div *ngIf="!isEmailUnique">Email already exists</div>
+              <div *ngIf="f.email.errors.email">Please enter valid Email</div>
+            </div>
+
+            <!-- Contact Number -->
+            <div class="form-field d-flex align-items-center">
+              <input type="text" formControlName="contactNumber" class="form-control" placeholder="Contact Number"
+                [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
+            </div>
+            <div *ngIf="f.contactNumber.touched && f.contactNumber.errors" class="alert alert-danger">
+              <div *ngIf="f.contactNumber.errors.required">
+                Contact Number is required
+              </div>
+              <div *ngIf="f.contactNumber.errors.pattern">
+                Contact Number can only be a 10 digit number
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button [disabled]="registerForm.invalid" class="btn btn-blue">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Register
+              </button>
+              <span><br></span>
+              <button routerLink="../login" class="btn btn-blue">Cancel</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="bg-red py-4" style="background-color: #ecf0f3;">
+      <div class="row px-3">
+        <h6 class="ml-4 ml-sm-5 mb-2">Copyright &copy; 2022. All rights reserved.</h6>
+      </div>
+    </div>
+  </div>
+</div>

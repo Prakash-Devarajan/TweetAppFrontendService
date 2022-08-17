@@ -1,0 +1,193 @@
+<div class="container-fluid">
+  <div class="row" style="padding-left: 150px;">
+    <!-- Nav Bar Component -->
+    <div class="col-md-5">
+      <div class="logo">
+        <img src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png" alt="">
+      </div>
+      <div [ngClass]="{'modal fade' : flag}" id="tweetPost">
+     
+      
+        <div class="row">
+          <div>
+            <div class="card-body">
+              <form [formGroup]="tweetForm" (ngSubmit)="onSubmit()">
+                <div class="form-group" >
+                  <textarea style="height: 300px; width: 300px;" formControlName="tweetBody" class="form-control" [(ngModel)]="tweetText"
+                    [ngClass]="{ 'is-invalid': f.tweetBody.touched && f.tweetBody.errors }"></textarea>
+                    <div *ngIf="f.tweetBody.touched && f.tweetBody.errors" class="alert alert-danger">
+                     <div *ngIf="f.tweetBody.errors.required">
+                      Tweet text is required
+                    </div>
+                    <div *ngIf="f.tweetBody.errors.maxlength">
+                      Tweet content cannot exceed 144 characters!
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <span *ngIf="!addTagClicked">
+                    <button class="btn btn-secondary" (click)="addTag()">
+                      #Tag
+                    </button>
+                  </span>
+                  <span *ngIf="addTagClicked">
+                    <input type="text" formControlName="tweetTag" [ngClass]="{
+                      'is-invalid': submitted && f.tweetTag.errors
+                    }" />
+                    <button class="btn btn-outline-danger btn-sm ml-3" (click)="removeTag()">
+                      X
+                    </button>
+                  </span>
+                  <button type="submit" [disabled]="tweetForm.invalid" class="btn btn-secondary float-right">Post</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+
+      <!-- Post tweet Chat -->
+
+      <div class="row row-cols-1" *ngFor="let tweet of tweetList; trackBy: trackTweet" style="margin: 10px;">
+        <div class="entete card w-100 h-100">
+          <div class="row no-gutters">
+            <div class="col-md-2">
+              <img src="../../assets/profile_pics.jpg"
+                [ngClass]="tweet.user.loginId == currentUser.loginId ?'card-img':'card-img grayscale'" alt="..." />
+            </div>
+            <div class="col-md-10">
+              <div class="card-body">
+                <h5 class="card-title">
+                  {{tweet.user.firstName}},{{tweet.user.lastName}}
+                  <span class="text-muted">
+                    @{{ tweet.user.loginId }}</span>
+                  <small class="text-muted float-right">{{
+                    tweet.postTime | dateAgo
+                    }}</small>
+                </h5>
+                <p class="card-text" style="border-style: solid;border-width: 1px; border-color: black; padding: 5px;">
+                  {{ tweet.tweetMsg }}
+                  <br><br>
+                  <small class="text-muted" *ngIf="tweet.tweetTag != null">#{{ tweet.tweetTag }}</small>
+                </p>
+              </div>
+              <p class="card-text" style="margin-bottom: 10px;">
+                <span class="ml-3 ">
+                  <span style="margin-right: 10px;" *ngIf="tweet.user.loginId == currentUser.loginId">
+                    <button class="btn btn-outline-dark ml-2" (click)="openEditTweetPopup(tweet)">
+                      <i class="fa fa-edit"></i></button><button class="btn btn-outline-danger ml-2"
+                      (click)="deleteTweet(tweet.tweetId)">
+                      <i class="fa fa-trash"></i></button></span>
+                  <button class="btn btn-outline-primary" (click)="likeTweet(tweet.tweetId)">
+                    <i class="fa fa-thumbs-up"> {{ tweet.likes }} </i>
+                  </button>
+                  <button class="btn btn-outline-info ml-2" (click)="openReplyTweetPopup(tweet)">
+                    <i class="fa fa-reply"></i>
+                  </button>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- reply chat -->
+
+        <div class="row row-cols-1" *ngIf="tweet.replies.length > 0">
+          <div class="row w-100" *ngFor="let replyTweet of tweet.replies">
+            <div class="card mb-2 mt-2 w-75 ml-auto">
+              <div class="row no-gutters">
+                <div class="col-md-2">
+                  <img src="../../assets/profile_pics.jpg" class="card-img grayscale" alt="..." />
+                </div>
+                <div class="col-md-10">
+                  <div class="card-body">
+                    <h5 class="card-title"> {{replyTweet.user.firstName}},{{replyTweet.user.lastName}}
+                      <span class="text-muted">
+                        @{{ replyTweet.user.loginId }}</span>
+                      <small class="text-muted float-right">{{
+                        replyTweet.postTime | dateAgo
+                        }}</small>
+                    </h5>
+                    <p class="card-text"
+                      style="border-style: solid;border-width: 1px; border-color: black; padding: 5px;">
+                      {{ replyTweet.tweetMsg }}<br><br>
+                      <small class="text-muted" *ngIf="replyTweet.tweetTag != null">#{{ replyTweet.tweetTag}}</small>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit tweet -->
+<div class="modal fade" id="editModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style=" background: #1DA1F2;">
+        <h5 class="modal-title">Edit Tweet</h5>
+        <button type="button" class="close" data-dismiss="modal"></button>
+      </div>
+      <form [formGroup]="editTweetForm" (ngSubmit)="editTweetSubmit()">
+        <div class="modal-body">
+          <textarea placeholder="{{ currentTweet.tweetMsg }}" class="w-100" formControlName="tweetBody" [ngClass]="{
+              'is-invalid':
+                editSubmitted && editTweetForm.controls.tweetBody.errors
+            }"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- reply tweet -->
+<div class="modal fade" id="replyModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style=" background: #79a9e0;">
+        <h5 class="modal-title">Reply Tweet</h5>
+        <button type="button" class="close" data-dismiss="modal"></button>
+      </div>
+      <form [formGroup]="replyTweetForm" (ngSubmit)="replyTweetSubmit()">
+        <div class="modal-body">
+          <p>{{ currentTweet.tweetMsg }}</p>
+          <textarea placeholder="reply..." class="w-100" formControlName="tweetBody" [ngClass]="{
+              'is-invalid':
+                replySubmitted && replyTweetForm.controls.tweetBody.errors
+            }"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="removeTag()">
+            Close
+          </button>
+          <button type="submit" [disabled]=replyTweetForm.invalid class="btn btn-primary">Reply</button>
+          <span class="float-right" *ngIf="!addTagClicked">
+            <button class="btn btn-primary" (click)="addTag()">Tag</button>
+          </span>
+          <span class="float-right" *ngIf="addTagClicked">
+            <button class="btn btn-outline-danger btn-sm float-right ml-3" (click)="removeTag()">
+              X
+            </button>
+            <input type="text" formControlName="tweetTag" [ngClass]="{
+                'is-invalid':
+                  replySubmitted && replyTweetForm.controls.tweetTag.errors
+              }" />
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

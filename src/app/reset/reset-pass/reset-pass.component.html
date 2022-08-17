@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <div class="wrapper">
+    <div class="logo">
+      <img src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+      Reset Password
+    </div>
+    <form class="p-3 mt-3" [formGroup]="resetPasswordForm" (ngSubmit)="onSubmit()">
+
+      <!-- Password -->
+      <div class="form-field d-flex align-items-center">
+        <input type="password" formControlName="password" class="form-control" placeholder="Password"
+          [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+      </div>
+      <div *ngIf="f.password.touched && f.password.errors" class="alert alert-danger">
+        <div *ngIf="f.password.errors.required">Password is required</div>
+        <div *ngIf="f.password.errors?.minlength">Minimum Password length is 6</div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-field d-flex align-items-center">
+        <input formControlName="confirmPassword" id="confirmPassword" type="password" class="form-control"
+          placeholder="Confirm Password" />
+      </div>
+      <div *ngIf="f.confirmPassword.touched && f.confirmPassword.invalid" class="alert alert-danger">
+        <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required.</div>
+        <div *ngIf="f.confirmPassword.errors.confirmedValidator">Password and Confirm Password must be match.</div>
+      </div>
+
+      <button type="submit" [disabled]="resetPasswordForm.invalid" class="btn mt-3">Reset</button>
+    </form>
+  </div>
+</div>

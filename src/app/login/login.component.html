@@ -1,0 +1,60 @@
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+  <div class="logo">
+    <img src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png" alt="">
+  </div>
+  <div class="text-center mt-4 name">
+    <h1>Welcome to Tweet App</h1>
+  </div>
+  <div class="card card0 border-0" style="background-color:#1DA1F2;">
+    <div class="row d-flex" style="padding-left: 100px;">
+      <div class="col-lg-5">
+        <div class="card1 pb-6">
+          <div class="row px-3" style="margin-bottom: 50px;margin-top: 70px; ">
+            <img src="../../assets/login.png" class="image">
+          </div>
+        </div>
+      </div>
+      <div class="border-line"></div>
+      <div class="col-lg-6">
+        <div class="card2 card border-0 px-4 py-5 " style="background-color:#1DA1F2; margin-left: 100px; ">
+          <div class="wrapper " style="margin-top: 30px; margin-bottom: auto;">
+
+            <div class="text-center mt-4 name">
+              <h4> Login</h4>
+            </div>
+
+            <form class="p-3 mt-3" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+              <div class="form-field d-flex align-items-center">
+                <input type="text" formControlName="loginId" class="user-input" placeholder="Username"
+                  [ngClass]="{ 'is-invalid': submitted && f.loginId.errors }" />
+              </div>
+              <div *ngIf="f.loginId.touched && f.loginId.errors" class="text-danger ">
+                <div *ngIf="f.loginId.errors.required">Username is required</div>
+              </div>
+
+
+              <div class="form-field d-flex align-items-center">
+                <input type="password" formControlName="password" class="pass-input" placeholder="Password"
+                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+              </div>
+              <div *ngIf="f.password.touched && f.password.errors" class="text-danger ">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+              </div>
+              <div *ngIf="invalid" class="text-danger">
+                <p>Invalid Credentials!! Please enter correct Username and Password</p>
+              </div>
+
+              <button type="submit" [disabled]="loginForm.invalid" class="btn mt-3">Login</button>
+
+            </form>
+
+            <div class="text-center fs-6">
+              <a routerLink="forgotpassword">Forget password?</a> or <a routerLink="register">Register</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

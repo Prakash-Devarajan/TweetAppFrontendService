@@ -1,0 +1,94 @@
+mat-toolbar {
+  background-color: #1DA1F2;
+  color: #000000;
+}
+
+mat-sidenav {
+  margin: 16px;
+  width: 250px;
+  right: 0;
+  border-right: none;
+  background-color: #1DA1F2;
+  color: black;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.logo {
+  width: 20px;
+  height: 20px;
+}
+.content {
+  height: calc(100vh - 99px);
+  border-radius: 10px;
+  margin: 16px;
+  overflow: auto;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 65px);
+}
+
+.menu-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1rem;
+  background-color: #1DA1F2;  
+}
+
+mat-icon {
+  margin-right: 8px;
+}
+
+.profile {
+  margin-right: 8px;
+  background-color: #1DA1F2;
+}
+
+.avatar-profile
+  {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+.avatar {
+  margin-top: 16px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.name {
+  margin-top: 8px;
+  font-weight: normal;
+}
+
+
+a {
+  color: black;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.icon-text {
+display: flex;
+align-items: center;
+}
+
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+
+mat-divider {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
